@@ -1,53 +1,180 @@
-<div class="main-content">
-    <div class="container-fluid">
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card">
-                    <div class="header">
-                        <h4 class="title">Striped Table with Hover</h4>
-                        <p class="category">Here is a subtitle for this table</p>
-                    </div>
-                    <div class="content table-responsive table-full-width">
-                          <table class="table table-hover table-striped">
-                                <thead>
-                                    <tr>
-                                        <th *ngFor="let cell of tablaPeliculas.headerRow">{{ cell }}</th>
-                                        <th>Accion</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-                                    <tr *ngFor="let row of tablaPeliculas.dataRows">
-                                        <td *ngFor="let cell of row">{{cell}}</td>
-                                        <td><i class="pe-7s-close" (click)="funcion()"></i><a href="#" class="pe-7s-tools"></a></td>
-                                    </tr>
-                                </tbody>
-                          </table>
+<!-- ################ Dialogos/Modales Editar y Anadir ################ -->
 
-                    </div>
-                </div>
+<ng-template #agregar let-modal>
+  <div class="model-header">
+    <h4 class="modal-title text-center">Agregar pelicula</h4>
+  </div>
+  <div class="form-group">
+    <div class="p-4">
+      <div class="content">
+        <div class="col">
+          <div class="">
+            <div class="form-group">
+              <label><strong>Nombre Pelicula</strong></label>
+              <input
+                type="text"
+                class="form-control"
+                placeholder=""
+                [(ngModel)]="selectedPelicula.name"
+              />
             </div>
-            <!-- <div class="col-md-12">
-                <div class="card card-plain">
-                    <div class="header">
-                        <h4 class="title">Table on Plain Background</h4>
-                        <p class="category">Here is a subtitle for this table</p>
-                    </div>
-                    <div class="content table-responsive table-full-width">
-                        <table class="table table-hover">
-                            <thead>
-                                <tr>
-                                    <th *ngFor="let cell of tableData2.headerRow">{{ cell }}</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr *ngFor="let row of tableData2.dataRows">
-                                    <td *ngFor="let cell of row">{{cell}}</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div> -->
+          </div>
+          <div class="">
+            <div class="form-group">
+              <label><strong>Estatus</strong></label
+              ><br />
+              <mat-radio-group
+                aria-label="Select an option"
+                [(ngModel)]="selectedPelicula.status"
+              >
+                <mat-radio-button [value]="true"> Activo</mat-radio-button>
+                <mat-radio-button [value]="false"> Inactivo</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="">
+            <div class="form-group">
+              <label><strong>Fecha Publicacion</strong></label
+              ><br />
+              <input
+                type="date"
+                id="fecha"
+                [(ngModel)]="selectedPelicula.fecha"
+              />
+            </div>
+          </div>
         </div>
+      </div>
     </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-failure" (click)="modal.close()">
+      Cerrar
+    </button>
+    <button
+      type="button"
+      class="btn btn-success"
+      (click)="agregarPelicula()"
+      [hidden]="!puedeGuardar()"
+    >
+      Guardar
+    </button>
+  </div>
+</ng-template>
+
+<ng-template #editar let-modal>
+  <div class="model-header">
+    <h4 class="modal-title text-center">Editar pelicula</h4>
+  </div>
+  <div class="form-group">
+    <div class="p-4">
+      <div class="content">
+        <div class="col">
+          <div class="">
+            <div class="form-group">
+              <label
+                ><strong>Nombre Pelicula {{ DataPelicula.name }}</strong></label
+              >
+              <input
+                type="text"
+                class="form-control"
+                [(ngModel)]="selectedPelicula.name"
+                placeholder="{{ DataPelicula.name }}"
+              />
+            </div>
+          </div>
+          <div class="">
+            <div class="form-group">
+              <label><strong>Estatus</strong></label
+              ><br />
+              <mat-radio-group
+                aria-label="Select an option"
+                [(ngModel)]="selectedPelicula.status"
+              >
+                <mat-radio-button [value]="true"> Activo</mat-radio-button>
+                <mat-radio-button [value]="false"> Inactivo</mat-radio-button>
+              </mat-radio-group>
+            </div>
+          </div>
+          <div class="">
+            <div class="form-group">
+              <label><strong>Fecha Publicacion</strong></label
+              ><br />
+              <input
+                type="date"
+                id="fecha"
+                [(ngModel)]="selectedPelicula.fecha"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <button type="button" class="btn btn-failure" (click)="modal.close()">
+      Cerrar
+    </button>
+    <button
+      type="button"
+      class="btn btn-primary"
+      (click)="editarPelicula()"
+      [hidden]="!puedeGuardar()"
+    >
+      Modificar
+    </button>
+  </div>
+</ng-template>
+
+<!-- ################ TABLA DE PELICULAS ################  -->
+
+<div class="main-content">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-md-12">
+        <div class="card">
+          <div class="header">
+            <div class="row justify-content-between px-3">
+              <h4 class="title">Administrar Peliculas</h4>
+              <button
+                class="btn btn-secondary"
+                (click)="dialogAgregar(agregar)"
+              >
+                Nueva Pelicula
+              </button>
+            </div>
+            <p class="category">Edita o elimina peliculas de la cartelera</p>
+          </div>
+          <div class="content table-responsive table-full-width">
+            <table class="table table-hover table-striped">
+              <thead>
+                <tr>
+                  <th *ngFor="let header of headers">
+                    {{ header }}
+                  </th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let pelicula of stackPeliculas">
+                  <td>{{ pelicula.id }}</td>
+                  <td>{{ pelicula.name }}</td>
+                  <td>{{ pelicula.fecha | date }}</td>
+                  <td *ngIf="pelicula.status">Activo</td>
+                  <td *ngIf="!pelicula.status">Inactivo</td>
+                  <td>
+                      <div class="justify-content-between">
+                          <a h>
+                          <span class="fa fa-times cursor" (click)="eliminar(pelicula)"></span>
+                          </a>
+                        <span class="fa fa-pencil cursor" (click)="dialogEditar(editar, pelicula)"></span>
+                      </div>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 </div>

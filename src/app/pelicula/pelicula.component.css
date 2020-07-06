@@ -1,0 +1,19 @@
+/* Sobreponer los dialogs de acciones */
+::ng-deep .cdk-overlay-container {
+    position: fixed !important;
+    z-index: 100000 !important;
+}
+
+.example-radio-group {
+    display: flex;
+    flex-direction: column;
+    margin: 15px 0;
+  }
+  
+  .example-radio-button {
+    margin: 5px;
+  }
+
+  .cursor {
+    cursor: pointer;
+  }

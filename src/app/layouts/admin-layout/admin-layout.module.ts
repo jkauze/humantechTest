@@ -9,11 +9,14 @@ import { AdminLayoutRoutes } from './admin-layout.routing';
 
 import { HomeComponent } from '../../home/home.component';
 import { UserComponent } from '../../user/user.component';
-import { TablesComponent } from '../../peliculas/tables.component';
 import { PeliculaComponent } from '../../pelicula/pelicula.component'
-import { TypographyComponent } from '../../typography/typography.component';
-import { IconsComponent } from '../../icons/icons.component';
 import { NotificationsComponent } from '../../notifications/notifications.component';
+import {MatInputModule} from '@angular/material/input';
+import {MatNativeDateModule} from '@angular/material/core';
+import {MatRadioModule} from '@angular/material/radio'
+
+import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
+
 
 
 @NgModule({
@@ -22,13 +25,14 @@ import { NotificationsComponent } from '../../notifications/notifications.compon
     RouterModule.forChild(AdminLayoutRoutes),
     FormsModule,
     LbdModule,
+    MatRadioModule,
+    MatInputModule,
+    MatNativeDateModule,
+    NgbModule,
   ],
   declarations: [
     HomeComponent,
     UserComponent,
-    TablesComponent,
-    TypographyComponent,
-    IconsComponent,
     NotificationsComponent,
     PeliculaComponent,
   ]
